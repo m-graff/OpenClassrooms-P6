@@ -2,6 +2,9 @@
 const express = require('express')
 const router = express.Router();
 
+// Controleurs de nos routes sauce
+const sauceCtrl = require('../controllers/sauce');
+
 // Différentes routes 
 router.post('/', auth, multer, sauceCtrl.createSauce);
 router.put('/:id', auth, multer, sauceCtrl.modifySauce);
