@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 const User = require('../models/User');
 
 
@@ -43,7 +42,7 @@ exports.login = (req, res, next) => {
               userId: user._id,
               token: jwt.sign(
                   { userId: user._id },
-                  'TEST_SECRET_RANDOM',
+                  'PEGASUS_TOKEN',
                   { expiresIn: '24h' }
               )
             });
