@@ -4,7 +4,11 @@ const express = require('express');
 // Importation du package Mongoose pour faciliter les interactions avec notre base de données MongoDB
 const mongoose = require('mongoose');
 
+// Importation du package bodyParser
 const bodyParser = require('body-parser');
+
+const sauceRoutes = require('./routes/sauce');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -26,26 +30,7 @@ app.use((req, res, next) => {
 // Traitement des données via bodyParser
 app.use(bodyParser.json());
 
-
-
-
-app.use((req, res, next) => {
-    console.log('Requête reçue !');
-    next();
-});
-
-app.use((req, res, next) => {
-    res.status(201);
-    next();
-})
-
-app.use((req, res, next) => {
-    res.json({ message : 'Vore requête a bien été reçue !'});
-    next();
-});
-
-app.use((req, res) => {
-    console.log('Réponse envoyée ave succès !');
-});
+app.use('/api/sauce', stuffRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
