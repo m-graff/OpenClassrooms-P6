@@ -30,10 +30,18 @@ exports.modifySauce = (req, res, next) => {
             .catch(error => res.status(400).json({ error }));
 };
 
-
-/*
 // Suppression d'une sauce
 exports.deleteSauce = (req, res, next) => {
-
-}
-*/
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            // Récupération du fichier image à supprimer
+            const filename = sauce.imageUrl.split('/images')[1];
+            // Suppression du fichier image puis de la sauce
+            fs.unlink(`images/${filename}`, () => {
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
+                    .catch(error => res.status(400).json({ error }));
+            });
+        })
+        .catch(error => res.status(500).json({ error }));
+};
