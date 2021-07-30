@@ -10,9 +10,9 @@ exports.createSauce = (req, res, next) => {
     delete sauceObject._id; // Suppression de l'id envoyé par le front
     const sauce = new Sauce ({ // Création du modèle de sauce
         ...sauceObject,
-        imageUrl : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
-        dislikes
+        dislikes: 0,
+        imageUrl : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
     // Sauvegarde du modèle de sauce dans la base de données
     sauce.save() 
