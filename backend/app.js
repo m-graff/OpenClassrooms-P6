@@ -1,16 +1,24 @@
 // Importation du framework Node.JS Express
 const express = require('express');
 
+
 // Importation du package Mongoose pour faciliter les interactions avec notre base de données MongoDB
 const mongoose = require('mongoose');
 
 // Importation du package bodyParser
 const bodyParser = require('body-parser');
 
+
+const path = require('path');
+
+
+// Routes
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
+
 const app = express();
+
 
 // Connexion à la base de données MongoDB
 mongoose.connect('mongodb+srv://Admin_P6:OpenClassrooms_P6_AdminCode@clusterp6.3kyh0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
@@ -30,7 +38,10 @@ app.use((req, res, next) => {
 // Traitement des données via bodyParser
 app.use(bodyParser.json());
 
-app.use('/api/sauce', stuffRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
+
 
 module.exports = app;

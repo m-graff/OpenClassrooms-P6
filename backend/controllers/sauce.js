@@ -6,7 +6,7 @@ const fs = require('fs');
 
 // Création d'une nouvelle sauce transformée en objet JS
 exports.createSauce = (req, res, next) => {
-    const sauceObjet = JSON.parse(req.body.sauce);
+    const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id; // Suppression de l'id envoyé par le front
     const sauce = new Sauce ({ // Création du modèle de sauce
         ...sauceObject,
