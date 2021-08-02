@@ -1,6 +1,8 @@
+// Importation du package dotenv
+require('dotenv').config();
+
 // Importation du framework Node.JS Express
 const express = require('express');
-
 
 // Importation du package Mongoose pour faciliter les interactions avec notre base de données MongoDB
 const mongoose = require('mongoose');
@@ -21,11 +23,12 @@ const app = express();
 
 
 // Connexion à la base de données MongoDB
-mongoose.connect('mongodb+srv://Admin_P6:OpenClassrooms_P6_AdminCode@clusterp6.3kyh0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.ID}:${process.env.PASS}@clusterp6.3kyh0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
+
 
 // Ajout des headers permettant le Cross Origin Resource Sharing (CORS)
 app.use((req, res, next) => {
