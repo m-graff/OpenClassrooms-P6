@@ -68,57 +68,57 @@ exports.likeSauce = (req, res, next) => {
     switch (req.body.like) {
 
     // L'utilisateur souhaite liker une sauce
-    case 1: 
-        Sauce.updateOne({_id: req.params.id}, {
-            _id: req.params.id,
-            $inc: {likes: 1},
-            $push: {usersLiked: req.body.userId},
-        })
-        .then(() => res.status(201).json({message: "Like enregistré !"}))
-        .catch(error => res.status(400).json({error}));
-        break;
+        case 1: 
+            Sauce.updateOne({_id: req.params.id}, {
+                _id: req.params.id,
+                $inc: {likes: 1},
+                $push: {usersLiked: req.body.userId},
+            })
+            .then(() => res.status(201).json({message: "Like enregistré !"}))
+            .catch(error => res.status(400).json({error}));
+            break;
     
     // L'utilisateur souhaite disliker une sauce
-    case -1:
-        Sauce.updateOne({_id: req.params.id}, {
-            _id: req.params.id,
-            $inc: {dislikes: 1},
-            $push: {usersDisliked: req.body.userId},
-        })
-        .then(() => res.status(201).json({message: "Dislike enregistré !"}))
-        .catch(error => res.status(400).json({error}));
-        break;
+        case -1:
+            Sauce.updateOne({_id: req.params.id}, {
+                _id: req.params.id,
+                $inc: {dislikes: 1},
+                $push: {usersDisliked: req.body.userId},
+            })
+            .then(() => res.status(201).json({message: "Dislike enregistré !"}))
+            .catch(error => res.status(400).json({error}));
+            break;
     
     // L'utilisateur souhaite modifier son like / dislike
-    case 0:
-        Sauce.findOne({ _id: req.params.id })
-        .then(sauce => {
+        case 0:
+            Sauce.findOne({ _id: req.params.id })
+            .then(sauce => {
             // Cas de figure où l'utilisateur a déjà liké une sauce
-            if (sauce.usersLiked.indexOf(req.body.userId) !== -1) {
-                Sauce.updateOne({_id: req.params.id}, {
-                    _id: req.params.id,
-                    $inc: {likes: -1},
-                    $pull: {usersLiked: req.body.userId},
-            })
-            .then(() => res.status(201).json({message: "Like supprimé !"}))
-            .catch(error => res.status(400).json({error}));
+                if (sauce.usersLiked.indexOf(req.body.userId) !== -1) {
+                    Sauce.updateOne({_id: req.params.id}, {
+                        _id: req.params.id,
+                        $inc: {likes: -1},
+                        $pull: {usersLiked: req.body.userId},
+                    })
+                    .then(() => res.status(201).json({message: "Like supprimé !"}))
+                    .catch(error => res.status(400).json({error}));
                 
-            }else {
+                }else {
             // Cas de figure où l'utilisateur a déjà disliké une sauce
-            if (sauce.usersDisliked.indexOf(req.body.userId) !== -1) {
-                Sauce.updateOne({_id: req.params.id}, {
-                    _id: req.params.id,
-                    $inc: {dislikes: -1},
-                    $pull: {usersDisliked: req.body.userId},
-                })
-                .then(() => res.status(201).json({message: "Dislike supprimé !"}))
-                .catch(error => res.status(400).json({error}));
-                }; 
-            }
-        })
-        .catch(error => res.status(500).json({error}));
-        break;
-    default :
-        console.error('Oups, une erreur est survenue !');
+                if (sauce.usersDisliked.indexOf(req.body.userId) !== -1) {
+                    Sauce.updateOne({_id: req.params.id}, {
+                        _id: req.params.id,
+                        $inc: {dislikes: -1},
+                        $pull: {usersDisliked: req.body.userId},
+                    })
+                    .then(() => res.status(201).json({message: "Dislike supprimé !"}))
+                    .catch(error => res.status(400).json({error}));
+                    }; 
+                }
+            })
+            .catch(error => res.status(500).json({error}));
+            break;
+        default :
+            console.error('Oups, une erreur est survenue !');
     };
 };

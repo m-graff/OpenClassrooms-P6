@@ -11,12 +11,12 @@ As it is kinda hard to install this version nowadays, you can use NVM in order t
 Once it's done: 
 
 #### Go to the frontend folder
-Open your terminal and run : 
+Open your terminal and run :   
 nvm use 10.0.0  
 npm start
 
-#### Go to he backend folder 
-Open your terminal and run :
+#### Go to the backend folder 
+Open your terminal and run :  
 nvm use 12.14  
 npm start
 
@@ -32,6 +32,7 @@ npm start
 - Angular
 - Express
 - MongoDB
+- Git & Github
 - CRUD Operations
 - OWASP & RGPD Standards
 
