@@ -10,17 +10,14 @@ const mongoose = require('mongoose');
 // Importation du package bodyParser
 const bodyParser = require('body-parser');
 
-
 const path = require('path');
 
-
-// Routes
-const sauceRoutes = require('./routes/sauce');
-const userRoutes = require('./routes/user');
-
+      // TEST !!!!!!!
+// Importation du package express-rate-limit pour contrer les attaques de force brute en limitant le nombre d'essai de mot de passe
+const apiLimiter = require('./middleware/limits-rate');
+      // TEST !!!!!!!!!
 
 const app = express();
-
 
 // Connexion à la base de données MongoDB
 mongoose.connect(`mongodb+srv://${process.env.ID}:${process.env.PASS}@clusterp6.3kyh0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
@@ -43,8 +40,11 @@ app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('/api/sauces', sauceRoutes);
-app.use('/api/auth', userRoutes);
+// Routes
+const sauceRoutes = require('./routes/sauce');
+const userRoutes = require('./routes/user');
 
+app.use('/api/sauces', apiLimiter, sauceRoutes);
+app.use('/api/auth', apiLimiter, userRoutes);
 
 module.exports = app;
