@@ -12,10 +12,8 @@ const bodyParser = require('body-parser');
 
 const path = require('path');
 
-      // TEST !!!!!!!
 // Importation du package express-rate-limit pour contrer les attaques de force brute en limitant le nombre d'essai de mot de passe
 const apiLimiter = require('./middleware/limits-rate');
-      // TEST !!!!!!!!!
 
 const app = express();
 
