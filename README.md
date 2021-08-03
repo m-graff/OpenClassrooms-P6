@@ -32,17 +32,21 @@ npm start
 - Angular
 - Express
 - MongoDB
+- Mongoose
 - Git & Github
 - CRUD Operations
 - OWASP & RGPD Standards
 
 I also used a lot of depencies like : 
-- Mongoose
-- Body-Parser
 - Bcrypt
+- Body-Parser
+- Dotenv
+- Express-rate-limit
 - Jsonwebtoken
+- Mongoose-unique-validator
 - Multer
-- Nodemon
+- Nodemon 
+- Password-validator
 
 ----
 
