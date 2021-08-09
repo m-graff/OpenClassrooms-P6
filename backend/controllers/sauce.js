@@ -10,7 +10,7 @@ exports.createSauce = (req, res, next) => {
     delete sauceObject._id; // Suppression de l'id envoyé par le front
     const sauce = new Sauce ({ // Création du modèle de sauce
         ...sauceObject,
-                likes: 0,
+            likes: 0,
             dislikes: 0,
             imageUrl : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
@@ -28,9 +28,28 @@ exports.modifySauce = (req, res, next) => {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
-        Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-            .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
+        // Cas de figure où on change l'image: suppression de l'ancienne image
+        if (req.file) {
+            Sauce.findOne({_id: req.params.id})
+            .then((sauce) => {
+            if (req.file) {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                // Suppression de l'ancienne image
+                fs.unlink(`images/${filename}`, () => {
+                // Maj de la sauce
+                Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+                .then(() => res.status(200).json({ message: 'Objet modifié !'}))
+                .catch(error => res.status(400).json({ error }));
+                });
+            };
+        })
+        .catch(error => res.status(400).json({ error }));
+        // Cas de figure où on ne modifie pas l'image 
+        } else {
+            Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Objet modifié !'}))
             .catch(error => res.status(400).json({ error }));
+        };
 };
 
 // Suppression d'une sauce
@@ -93,7 +112,7 @@ exports.likeSauce = (req, res, next) => {
         case 0:
             Sauce.findOne({ _id: req.params.id })
             .then(sauce => {
-            // Cas de figure où l'utilisateur a déjà liké une sauce
+            // Cas de figure où l'utilisateur a déjà liké une sauce (présent dans le tableau des usersLiked)
                 if (sauce.usersLiked.indexOf(req.body.userId) !== -1) {
                     Sauce.updateOne({_id: req.params.id}, {
                         _id: req.params.id,
@@ -104,7 +123,7 @@ exports.likeSauce = (req, res, next) => {
                     .catch(error => res.status(400).json({error}));
                 
                 }else {
-            // Cas de figure où l'utilisateur a déjà disliké une sauce
+            // Cas de figure où l'utilisateur a déjà disliké une sauce (présent dans le tableau des userDisliked)
                 if (sauce.usersDisliked.indexOf(req.body.userId) !== -1) {
                     Sauce.updateOne({_id: req.params.id}, {
                         _id: req.params.id,

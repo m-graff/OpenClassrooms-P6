@@ -21,21 +21,9 @@ const storage = multer.diskStorage({
         const extension = MIME_TYPES[file.mimetype];
         callback(null, name + Date.now() + '.' + extension);
     }
-
-/*
-    // Blocage des fichiers proposés par l'utilisateur dans le cas où ces derniers ne seraient pas en format jpg, jpeg ou png
-    fileFilter: function (req, file, callbak) {
-        const extension = path.extname(file.originalname);
-        if (extenion !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {}
-            return callback
-                (new Error( "Seuls les fichiers image peuvent être téléchargé (format accepté: jpg, jpeg, png) !"))
-        }
-*/
-
 });
 
 module.exports = multer({ storage: storage }).single('image');
-
 
 
 
