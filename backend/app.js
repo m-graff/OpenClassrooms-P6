@@ -1,15 +1,20 @@
-// IMPORTS // 
-const express = require('express');
-const mongoose = require('mongoose');
+// Importations
+const express = require('express'); // permet de deployer rapidement l'API 
+const mongoose = require('mongoose'); // facilite l'accès et les opérations liées à la base de données MongoDB
 mongoose.set('useCreateIndex', true);
-const bodyParser = require('body-parser');
-const sauceRoutes = require('./routes/sauce');
-const userRoutes = require('./routes/user');
-const apiLimiter = require("./middleware/limits-rate");
-const path = require('path');
+const helmet = require('helmet'); // sécurise notre application Express en ajoutant des en-têtes HTTP diverses
+const bodyParser = require('body-parser'); // middleware express lisant l'entrée d'un formulaire, le stockant en tant qu'objet javascript accessible via req.body
+const apiLimiter = require("./middleware/limits-rate"); // middleware limitant les demandes répétées à l'API 
+const path = require('path'); // module donnant accès au chemin du système de fichiers
+const sauceRoutes = require('./routes/sauce'); // route sauce
+const userRoutes = require('./routes/user'); // route user
 
-// Importation du package dotenv
+// Importation du package dotenv sécurisant les informations sensibles liées à la base de donnnées MongoDB
 require('dotenv').config();
+
+// Création de l'application Express, sécurisée par le package Helmet via la définition d'en-têtes HTTP diverses 
+const app = express();
+app.use(helmet());
 
 // Connexion à la base de données MongoDB
 mongoose.connect(`mongodb+srv://${process.env.ID}:${process.env.PASS}@clusterp6.3kyh0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
@@ -17,8 +22,6 @@ mongoose.connect(`mongodb+srv://${process.env.ID}:${process.env.PASS}@clusterp6.
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
-const app = express();
 
 // Ajout des headers permettant le Cross Origin Resource Sharing (CORS)
 app.use((req, res, next) => {
@@ -28,65 +31,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Traitement des données via bodyParser
+// Traitement des données via bodyParser rendant celles-ci exploitables
 app.use(bodyParser.json());
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
-
+// Définition des différentes routes
 app.use('/api/sauces', apiLimiter, sauceRoutes);
 app.use('/api/auth', apiLimiter, userRoutes);
-
-module.exports = app;
-
-
-
-/*
-// Importation du package dotenv
-require('dotenv').config();
-
-// Importation du framework Node.JS Express
-const express = require('express');
-const app = express();
-
-// Importation du package Mongoose pour faciliter les interactions avec notre base de données MongoDB
-const mongoose = require('mongoose');
-mongoose.set('useCreateIndex', true);
-
-// Importation du package bodyParser
-const bodyParser = require('body-parser');
-
-const path = require('path');
-
-// Importation du package express-rate-limit pour contrer les attaques de force brute en limitant le nombre d'essai de mot de passe
-const apiLimiter = require('./middleware/limits-rate');
-
-// Connexion à la base de données MongoDB
-mongoose.connect(`mongodb+srv://${process.env.ID}:${process.env.PASS}@clusterp6.3kyh0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
-
-
-// Ajout des headers permettant le Cross Origin Resource Sharing (CORS)
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Accès autorisé pour tous
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'); // Accès autorisé sous certains en-têtes
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS'); // Accès autorisé sous certaines méthodes
-    next();
-});
-
-// Traitement des données via bodyParser
-app.use(bodyParser.json());
-
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Routes
-const sauceRoutes = require('./routes/sauce');
-const userRoutes = require('./routes/user');
-
-app.use('/api/sauces', apiLimiter, sauceRoutes);
-app.use('/api/auth', apiLimiter, userRoutes);
-
+// Exportation de l'application
 module.exports = app;
-*/
