@@ -4,10 +4,12 @@ const mongoose = require('mongoose'); // facilite l'accès et les opérations li
 mongoose.set('useCreateIndex', true);
 const helmet = require('helmet'); // sécurise notre application Express en ajoutant des en-têtes HTTP diverses
 const bodyParser = require('body-parser'); // middleware express lisant l'entrée d'un formulaire, le stockant en tant qu'objet javascript accessible via req.body
+const mongoSanitize = require('express-mongo-sanitize'); // middleware nettoyant les données utilisateur pour empêcher les attaques d'injection NoSQL
 const apiLimiter = require("./middleware/limits-rate"); // middleware limitant les demandes répétées à l'API 
 const path = require('path'); // module donnant accès au chemin du système de fichiers
 const sauceRoutes = require('./routes/sauce'); // route sauce
 const userRoutes = require('./routes/user'); // route user
+
 
 // Importation du package dotenv sécurisant les informations sensibles liées à la base de donnnées MongoDB
 require('dotenv').config();
@@ -33,6 +35,9 @@ app.use((req, res, next) => {
 
 // Traitement des données via bodyParser rendant celles-ci exploitables
 app.use(bodyParser.json());
+
+// Data sanitization contre les injections NoSQL
+app.use(mongoSanitize());
 
 // Définition des différentes routes
 app.use('/api/sauces', apiLimiter, sauceRoutes);
