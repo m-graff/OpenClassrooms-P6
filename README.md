@@ -1,4 +1,4 @@
-## Welcome to this project, "So Pekocko" website !
+## Welcome to this project, "So Pekocko" website ! 
 
 This is an exercice as part of my developer training for OpenClassrooms. This is also the first time i fully explore the wonderful world of Backends techs !
 
@@ -10,15 +10,15 @@ As it is kinda hard to install this version nowadays, you can use NVM in order t
 
 Once it's done: 
 
-#### Go to the frontend folder
-Open your terminal and run :   
-nvm use 10.0.0  
-npm start
-
 #### Go to the backend folder 
 Open your terminal and run :  
 nvm use 12.14  
-npm start
+npm start  
+
+#### Go to the frontend folder  
+Open your terminal and run :   
+nvm use 10.0.0  
+npm start  
 
 ----
 
@@ -41,7 +41,9 @@ I also used a lot of depencies like :
 - Bcrypt
 - Body-Parser
 - Dotenv
+- Express-mongo-sanitize
 - Express-rate-limit
+- Helmet
 - Jsonwebtoken
 - Mongoose-unique-validator
 - Multer
